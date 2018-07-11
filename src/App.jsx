@@ -20,17 +20,18 @@ class App extends Component {
         }
       ]
     }
-  //this.addTaskName = this.addTaskName.bind(this);///use this example for binding 
+  //this.udername = this.username.bind(this);///use this example for binding 
+  //this.content = this.content.bind(this)
   //states - Like local variables
 }
 
 componentDidMount() {
-  console.log("componentDidMount <App />");
+  console.log('componentDidMount <App />');
   setTimeout(() => {
-    console.log("Simulating incoming message");
+    console.log('Simulating incoming message');
     // Add a new message to the list of messages in the data store
 
-    const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+    const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
     const messages = this.state.messages.concat(newMessage)
     // Update the state of the app component.
     // Calling setState will trigger a call to render() in App and all child components.
@@ -38,21 +39,23 @@ componentDidMount() {
   }, 3000);
 }
 
+///////////////////////////////////
+handleNewMessage = (content) => {
+  const newMessage = {
+    username: this.state.currentUser.name, content: content
+  }
+  
+  const messages = this.state.messages.concat(newMessage)
+
+  this.setState({messages: messages});
+}
+
+//////////////////////////////////////
+
 
 
 render() {
-  //calling different funcions
-
-    // let taskItems;
-    // if (this.state.loading === true) {
-    //   taskItems = <Loading />;
-    // } else {
-    //   taskItems = this.state.tasks.map(task => (
-    //     <TodoListItem key={task.id} task={task} />
-    //   ));
-    //   console.log(taskItems);
  
-
     return (
       <div>
         <nav className="navbar">
@@ -61,8 +64,8 @@ render() {
 
        
        
-       <MessageList messages={this.state.messages}/>
-        <Chatbar currentUser={this.state.currentUser}/>
+      <MessageList messages={this.state.messages}/>
+      <Chatbar currentUser={this.state.currentUser} handleNewMessage={this.handleNewMessage}/>
       </div>
     );
   }
