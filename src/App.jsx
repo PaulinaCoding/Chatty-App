@@ -7,6 +7,8 @@ import  MessageList  from './MessageList.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.WebSocket = new WebSocket("ws://localhost:3001");
     this.state = {
       currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
@@ -26,6 +28,15 @@ class App extends Component {
 }
 
 componentDidMount() {
+  ///Create websocket
+  
+  this.WebSocket.onopen = (event)  => {
+  this.WebSocket.send("Here's some text that the server is urgently awaiting!"); 
+  this.WebSocket.onmessage = function (event){
+    console.log(event.data)
+  }
+  };
+
   console.log('componentDidMount <App />');
   setTimeout(() => {
     console.log('Simulating incoming message');
@@ -37,6 +48,8 @@ componentDidMount() {
     // Calling setState will trigger a call to render() in App and all child components.
     this.setState({messages: messages})
   }, 3000);
+
+
 }
 
 ///////////////////////////////////
@@ -46,13 +59,10 @@ handleNewMessage = (content) => {
   }
   
   const messages = this.state.messages.concat(newMessage)
-
   this.setState({messages: messages});
 }
 
 //////////////////////////////////////
-
-
 
 render() {
  
