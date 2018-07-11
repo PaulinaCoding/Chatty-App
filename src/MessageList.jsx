@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Message from './Message.jsx';
 
 class MessageList extends Component {
   constructor(props) {
@@ -6,12 +7,19 @@ class MessageList extends Component {
   }
 
   render() {
+
+
+    const messages= this.props.messages;
+    const listItems = messages.map((message)=>
+    <Message content={message.content} username={message.username}/>
+   )
+
+
+
     return (
     <main className="messages">
-             <div className="message">
-               <span className="message-username">Anonymous1</span>
-               <span className="message-content">I won't be impressed with technology until I can download food.</span>
-             </div>
+             {listItems}
+  
              <div className="message system">
                Anonymous1 changed their name to nomnom.
              </div>
@@ -21,7 +29,7 @@ class MessageList extends Component {
   }
 }
 
-export {MessageList};
+export default MessageList;
 
  
  
