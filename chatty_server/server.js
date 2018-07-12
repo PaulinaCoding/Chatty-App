@@ -19,12 +19,12 @@ const wss = new SocketServer({ server });
 
 wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
-      if (client.readyState === wss.OPEN) {
-        client.send(data);
-      }
+      console.log(data)
+      // if (client.readyState === wss.OPEN) {
+       client.send(data);
+      //}
   });
 };
-
 
 
 // Set up a callback that will run when a client connects to the server
@@ -44,8 +44,9 @@ wss.on('connection', (ws) => {
       content: incomingMessage.content,
 
     }
+    console.log(incomingMessage)
+    wss.broadcast(JSON.stringify(sentMessage));
 
-    wss.broadcast(sentMessage);
   });
   
   console.log('Client connected');
