@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 class Chatbar extends Component {
-  
+
 
 
 /////////////////////////////////
