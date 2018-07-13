@@ -6,10 +6,8 @@ class Notification extends Component {
   }
 
   render() {
-    
 
 
-   // line 22 {userA} changed their name to {userB}.
     return (
    
           <div className="message system">
@@ -23,4 +21,4 @@ class Notification extends Component {
 
 export default Notification;
 
-//`${this.state.currentUser.name} has changed to ${newUsername}`
+
