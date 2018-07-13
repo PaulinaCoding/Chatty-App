@@ -3,7 +3,6 @@ const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 
 
-
 // Set the port to 3001
 const PORT = 3001;
 
@@ -20,9 +19,7 @@ const wss = new SocketServer({ server });
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     console.log(data)
-    // if (client.readyState === wss.OPEN) {
     client.send(data);
-    //}
   });
 };
 
@@ -34,32 +31,21 @@ wss.on('connection', (ws) => {
   type: 'usersNumber', 
   count: wss.clients.size}));
   
-  console.log('Number of clients went up to:',wss.clients.size)
+  console.log('Number of users went up to:',wss.clients.size)
   
   ws.on('message', function incoming(data) {
-    const uniqueId = uuidv4()
     const incomingMessage = JSON.parse(data);
 
-    //console.log('incoming data', incomingMessage);
     
 //Changing the postNotifactions to incomingNotification
     incomingMessage.type = incomingMessage.type.replace('post', 'incoming');
-    
-    
-    //console.log('new data', incomingMessage);
 
-
-    // console.log(data);
-    // console.log('received: %s', JSON.stringify(incomingMessage));
-    // console.log(uniqueId);
-    // const sentMessage = {
-    //   type: 'incomingMessage',
-    //   id: uniqueId,
-    //   username: incomingMessage.username,
-    //   content: incomingMessage.content,
-    // }
-    // console.log(incomingMessage)
-    wss.broadcast(JSON.stringify(incomingMessage));
+    const outgoingMessage = {
+      id: uuidv4(),
+      ...incomingMessage
+    }
+  
+    wss.broadcast(JSON.stringify(outgoingMessage));
 
   });
   
@@ -69,7 +55,7 @@ wss.on('connection', (ws) => {
     ws.on('close', () => {
       wss.broadcast(JSON.stringify({type: 'usersNumber', count: wss.clients.size }))
       console.log('Client disconnected')
-      console.log('Number of clients went down to: ', wss.clients.size)
+      console.log('Number of users went down to: ', wss.clients.size)
     })
   
 });

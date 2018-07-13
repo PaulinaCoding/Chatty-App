@@ -7,14 +7,12 @@ class Navbar extends Component {
 
   render() {
 
-
     return (
    
       <nav className="navbar">
-      <a href="/" className="navbar-brand">Chatty</a>
-      <div className="usersNumber">{this.props.content}</div>
-    </nav>
-
+        <a href="/" className="navbar-brand">Chatty</a>
+        <div className="usersNumber">{this.props.content}</div>
+      </nav>
     );
   }
 }

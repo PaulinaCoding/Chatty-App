@@ -8,10 +8,9 @@ class MessageList extends Component {
   }
 
   render() {
- 
     const messages= this.props.messages;
     const listItems = messages.map((message)=> {
-        if (message.type === 'incomingNotification' ) {
+        if (message.type === 'incomingNotification') {
           return <Notification content={message.content}/>
         } else {
           return  <Message content={message.content} username={message.username}/> 
@@ -20,9 +19,8 @@ class MessageList extends Component {
 
     return (
     <main className="messages">
-             {listItems}
-
-        </main>
+     {listItems}
+    </main>
     );
   }
 }

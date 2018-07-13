@@ -11,22 +11,18 @@ class App extends Component {
 
     this.state = {
       usersNumber: 0,
-      currentUser: {name: "Anonymous"},//{name: 'Bob'},
+      currentUser: {name: "Anonymous"},
       messages: [] // messages coming from the server will be stored here as they arrive
     }
  
     this.handleNewUser = this.handleNewUser.bind(this); 
-    //this.content = this.content.bind(this)
-    //states - Like local variables
+    
       
-  } //constructor bracket ends;
+  }; //constructor bracket ends;
 
   componentDidMount() {
   ///Create websocket
   
-  // this.WebSocket.onopen = (event)  => {
-  //  //this.WebSocket.send("Here's some text that the server is urgently awaiting!"); 
-  //  console.log(event);
     this.WebSocket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log('message from server', message);
@@ -39,24 +35,21 @@ class App extends Component {
 
           break;
         case "incomingNotification":
-        console.log(message);
           const NewNotification = this.state.messages.concat(message)
           this.setState({messages: NewNotification});
         
           break;
           case "usersNumber":
           this.handleUsersNumber(message.count)
+          
           break;
-        
           default:
-          console.log(message)
+          
           // show an error in the console if the message type is unknown
           throw new Error("Unknown event type " + message.type);
       }
-
-      console.log("testing the random string")
     }
-  }
+  };
 
   handleNewMessage = (content) => {
 
@@ -65,7 +58,6 @@ class App extends Component {
       username: this.state.currentUser.name, 
       content: content
     };
-
 
     this.WebSocket.send(JSON.stringify(newMessage));
   };
@@ -92,7 +84,6 @@ class App extends Component {
 
 
   render() {
-    console.log('Curent state:', this.state)
       return (
         <div>
           <Navbar content={this.state.usersNumber.content} />
@@ -102,6 +93,6 @@ class App extends Component {
       )
   }
 
-}
+};
 
 export default App;
