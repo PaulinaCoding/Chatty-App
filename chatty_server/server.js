@@ -18,14 +18,13 @@ const wss = new SocketServer({ server });
 
 
 wss.broadcast = function broadcast(data) {
-    wss.clients.forEach(function each(client) {
-      console.log(data)
-      // if (client.readyState === wss.OPEN) {
-       client.send(data);
-      //}
+  wss.clients.forEach(function each(client) {
+    console.log(data)
+    // if (client.readyState === wss.OPEN) {
+    client.send(data);
+    //}
   });
 };
-
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -35,14 +34,31 @@ wss.on('connection', (ws) => {
     const uniqueId = uuidv4()
     const incomingMessage = JSON.parse(data);
 
-      console.log(data);
-      console.log('received: %s', JSON.stringify(incomingMessage));
-      console.log(uniqueId);
+
+    ////Broadcasting poststuff?
+    // switch(message.type) {
+    //   case "postMessage":
+    //     // handle post message
+    //     const messages = this.state.messages.concat(incomingMessage)
+    //     this.setState({messages: messages});
+
+    //     break;
+    //   case "postNotification":
+    //     // handle post notification
+    //     const sentNotification = this.state.sentNotification.concat(incomingMessage)
+    //     this.setState({messages: sentNotification});
+    //     break;
+    //   
+    // }
+
+    console.log(data);
+    console.log('received: %s', JSON.stringify(incomingMessage));
+    console.log(uniqueId);
     const sentMessage = {
+      type: 'incomingMessage',
       id: uniqueId,
       username: incomingMessage.username,
       content: incomingMessage.content,
-
     }
     console.log(incomingMessage)
     wss.broadcast(JSON.stringify(sentMessage));

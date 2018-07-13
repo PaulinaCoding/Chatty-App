@@ -16,10 +16,10 @@ class Chatbar extends Component {
 
   onEnterUser = (event) => {
     if(event.key === 'Enter') {
-     this.props.handleNewUser(event.target.value);
-        console.log('value', event.target.value)
+      this.props.handleNewUser(event.target.value);
+      console.log('value', event.target.value)
       
-        //event.target.value = '';
+      //event.target.value = '';
     }
   };
   

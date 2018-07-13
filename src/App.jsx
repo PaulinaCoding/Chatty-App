@@ -4,67 +4,90 @@ import  MessageList  from './MessageList.jsx';
 
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.WebSocket = new WebSocket("ws://localhost:3001");
+  constructor(props) {
+    super(props);
+    this.WebSocket = new WebSocket("ws://localhost:3001");
 
-        this.state = {
-            currentUser: {username: "Anonymous"},//{name: 'Bob'},
-            messages: [] // messages coming from the server will be stored here as they arrive
-        }
+    this.state = {
+      currentUser: {name: "Anonymous"},//{name: 'Bob'},
+      messages: [] // messages coming from the server will be stored here as they arrive
+    }
  
-  this.handleNewUser = this.handleNewUser.bind(this); 
-  //this.content = this.content.bind(this)
-  //states - Like local variables
-    
-    } //constructor bracket ends;
+    this.handleNewUser = this.handleNewUser.bind(this); 
+    //this.content = this.content.bind(this)
+    //states - Like local variables
+      
+  } //constructor bracket ends;
 
   componentDidMount() {
   ///Create websocket
   
-      this.WebSocket.onopen = (event)  => {
-       //this.WebSocket.send("Here's some text that the server is urgently awaiting!"); 
-       console.log(event);
+      // this.WebSocket.onopen = (event)  => {
+      //  //this.WebSocket.send("Here's some text that the server is urgently awaiting!"); 
+      //  console.log(event);
         this.WebSocket.onmessage = (event) => {
           const message = JSON.parse(event.data);
+          
+          //////////////////////////////////
+          switch(message.type) {
+            case "incomingMessage":
+              // handle incoming message
+              const messages = this.state.messages.concat(message)
+              this.setState({messages: messages});
+
+   /////////////////////////////////////////////////////
+              break;
+            case "incomingNotification":
+             
+
+
+
+              console.log("If this isn't showing, that's Problem #2");
+              console.log("If this isn't old AND new names, that's Problem #3", message.oldName, message.newName);
+              // handle incoming notification
+              // TODO: the below code is wrong.  what's the right thing?
+              // const sentNotification = this.state.sentNotification.concat(message)
+              // this.setState({messages: sentNotification});
+              break;
+            default:
+              // show an error in the console if the message type is unknown
+              throw new Error("Unknown event type " + message.type);
+          }
+          ////////////////////////////////////
+
+
           console.log(message)
           console.log("testing the random string")
         }
-      }
+      // }
     }
     
 
-handleNewMessage = (content) => {
+  handleNewMessage = (content) => {
 
-  const newMessage = {
-      username: this.state.currentUser.username, 
+    const newMessage = {
+      type: "postMessage",
+      username: this.state.currentUser.name, 
       content: content
-  };
-  console.log(content)
-  console.log("Testing inside handleMessage", this.state.currentUser.username)
+    };
+    // console.log(content)
+    // console.log("Testing inside handleMessage", this.state.currentUser.name)
 
-  const messages = this.state.messages.concat(newMessage)
-  this.setState({messages: messages});
-  this.WebSocket.send(JSON.stringify(newMessage));
-  
-}
-////////////////////////////////
-handleNewUser = (username) => {
-    const newUser = {
-    username: this.state.currentUser.username
+    this.WebSocket.send(JSON.stringify(newMessage));
     
-    }
+  }
 
-  console.log(this.state.currentUser.username)
-
- 
-  this.setState({currentUser: {username:username}});
-  this.WebSocket.send(JSON.stringify(newUser));
-  
-  console.log('user', username);
-}
-
-
+  ////////////////////////////////
+  handleNewUser = (newUsername) => {
+    const newUserMessage = {
+      // TODO: needs more information, or different information
+      type: "postNotification",
+      olduser: this.state.currentUser.name,
+      newuser: newUsername,
+    };
+    this.setState({currentUser: {name: newUsername}});
+    this.WebSocket.send(JSON.stringify(newUserMessage));
+  }
 
 render() {
  

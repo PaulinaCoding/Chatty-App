@@ -8,23 +8,20 @@ class MessageList extends Component {
 
   render() {
 
-
     const messages= this.props.messages;
     const listItems = messages.map((message)=>
     <Message content={message.content} username={message.username}/>
    )
 
 
-
+   // line 22 {userA} changed their name to {userB}.
     return (
     <main className="messages">
              {listItems}
-  
-             <div className="message system">
-               Anonymous1 changed their name to nomnom.
-             </div>
-           </main>
-     
+          <div className="message system">
+            <span className="notification-content">Anonymous1 changed their name to nomnom.</span>
+          </div>
+        </main>
     );
   }
 }
