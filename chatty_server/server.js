@@ -34,34 +34,22 @@ wss.on('connection', (ws) => {
     const uniqueId = uuidv4()
     const incomingMessage = JSON.parse(data);
 
+    console.log('incoming data', incomingMessage);
+    incomingMessage.type = incomingMessage.type.replace('post', 'incoming');
+    console.log('new data', incomingMessage);
 
-    ////Broadcasting poststuff?
-    // switch(message.type) {
-    //   case "postMessage":
-    //     // handle post message
-    //     const messages = this.state.messages.concat(incomingMessage)
-    //     this.setState({messages: messages});
 
-    //     break;
-    //   case "postNotification":
-    //     // handle post notification
-    //     const sentNotification = this.state.sentNotification.concat(incomingMessage)
-    //     this.setState({messages: sentNotification});
-    //     break;
-    //   
+    // console.log(data);
+    // console.log('received: %s', JSON.stringify(incomingMessage));
+    // console.log(uniqueId);
+    // const sentMessage = {
+    //   type: 'incomingMessage',
+    //   id: uniqueId,
+    //   username: incomingMessage.username,
+    //   content: incomingMessage.content,
     // }
-
-    console.log(data);
-    console.log('received: %s', JSON.stringify(incomingMessage));
-    console.log(uniqueId);
-    const sentMessage = {
-      type: 'incomingMessage',
-      id: uniqueId,
-      username: incomingMessage.username,
-      content: incomingMessage.content,
-    }
-    console.log(incomingMessage)
-    wss.broadcast(JSON.stringify(sentMessage));
+    // console.log(incomingMessage)
+    wss.broadcast(JSON.stringify(incomingMessage));
 
   });
   

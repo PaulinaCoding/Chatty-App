@@ -27,6 +27,7 @@ class App extends Component {
       //  console.log(event);
         this.WebSocket.onmessage = (event) => {
           const message = JSON.parse(event.data);
+          console.log('message from server', message);
           
           //////////////////////////////////
           switch(message.type) {
@@ -38,9 +39,11 @@ class App extends Component {
    /////////////////////////////////////////////////////
               break;
             case "incomingNotification":
-             
-
-
+            console.log(message);
+              // const newNotification = this.state.messages.cont
+              //const newNotification = this.state.messages.concat(message)
+              const NewNotification = this.state.messages.concat(message)
+              this.setState({messages: NewNotification});
 
               console.log("If this isn't showing, that's Problem #2");
               console.log("If this isn't old AND new names, that's Problem #3", message.oldName, message.newName);
@@ -55,8 +58,7 @@ class App extends Component {
           }
           ////////////////////////////////////
 
-
-          console.log(message)
+          // console.log(message)
           console.log("testing the random string")
         }
       // }
@@ -82,8 +84,8 @@ class App extends Component {
     const newUserMessage = {
       // TODO: needs more information, or different information
       type: "postNotification",
-      olduser: this.state.currentUser.name,
-      newuser: newUsername,
+      content: `${this.state.currentUser.name} has changed to ${newUsername}`
+    
     };
     this.setState({currentUser: {name: newUsername}});
     this.WebSocket.send(JSON.stringify(newUserMessage));
