@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Chatbar from './Chatbar.jsx';
 import  MessageList  from './MessageList.jsx';
+import  Navbar  from './Navbar.jsx';
 
 
 class App extends Component {
@@ -9,6 +10,7 @@ class App extends Component {
     this.WebSocket = new WebSocket("ws://localhost:3001");
 
     this.state = {
+      usersNumber: 0,
       currentUser: {name: "Anonymous"},//{name: 'Bob'},
       messages: [] // messages coming from the server will be stored here as they arrive
     }
@@ -28,8 +30,7 @@ class App extends Component {
     this.WebSocket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log('message from server', message);
-      
-      //////////////////////////////////
+    
       switch(message.type) {
         case "incomingMessage":
           // handle incoming message
@@ -41,18 +42,21 @@ class App extends Component {
         console.log(message);
           const NewNotification = this.state.messages.concat(message)
           this.setState({messages: NewNotification});
-
-
         
           break;
-        default:
+          case "usersNumber":
+          this.handleUsersNumber(message.count)
+          break;
+        
+          default:
+          console.log(message)
           // show an error in the console if the message type is unknown
           throw new Error("Unknown event type " + message.type);
       }
 
       console.log("testing the random string")
     }
-}
+  }
 
   handleNewMessage = (content) => {
 
@@ -64,30 +68,40 @@ class App extends Component {
 
 
     this.WebSocket.send(JSON.stringify(newMessage));
-  }
+  };
 
-  ////////////////////////////////
+
   handleNewUser = (newUsername) => {
     const newUserMessage = {
-      type: "postNotification",
+      type: 'postNotification',
       content: `${this.state.currentUser.name} has changed to ${newUsername}`
     
-    };
+    }
     this.setState({currentUser: {name: newUsername}});
     this.WebSocket.send(JSON.stringify(newUserMessage));
+  };
+
+
+  handleUsersNumber = (usersNumber) => {
+    const usersNumberDisplay = {
+      content: `Number of active users: ${usersNumber}`
+    }
+    this.setState({usersNumber: usersNumberDisplay});
+    
+  };
+
+
+  render() {
+    console.log('Curent state:', this.state)
+      return (
+        <div>
+          <Navbar content={this.state.usersNumber.content} />
+            <MessageList messages={this.state.messages}/>
+            <Chatbar handleNewUser={this.handleNewUser} handleNewMessage={this.handleNewMessage}/>
+        </div>
+      )
   }
 
-render() {
-    return (
-      <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-          <div className="users-number">Number of active users: </div>
-        </nav>
-          <MessageList messages={this.state.messages}/>
-          <Chatbar handleNewUser={this.handleNewUser} handleNewMessage={this.handleNewMessage}/>
-      </div>
-    );
-  }
 }
+
 export default App;
