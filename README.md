@@ -40,4 +40,4 @@ ws: ^5.2.2
 
 ## Final Product
 
-!['Presentation step by step']()
+!['Presentation step by step'](https://github.com/PaulinaCoding/Chatty-App/blob/master/docs/chattyApp.gif)
